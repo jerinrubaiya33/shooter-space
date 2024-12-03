@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Space Shooter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="space_shooter.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="hud">
+            <div id="score">Score: 0</div>
+            <div id="health">Health: 100%</div>
+            <div id="timer">Time: 60s</div>
+        </div>
+        <div id="player"></div>
+        <div id="start-screen" class="overlay">
+            <h1>Space Shooter</h1>
+            <p class="desktop-only">Move your mouse to aim, click to shoot!</p>
+            <p class="mobile-only">Touch and drag to move, tap to shoot!</p>
+            <button id="start-btn">Start Mission</button>
+        </div>
+        <div id="game-over" class="overlay hidden">
+            <h2>Mission Failed</h2>
+            <div id="final-score"></div>
+            <button id="restart-btn">Try Again</button>
+        </div>
+        <div id="joystick-area" class="mobile-only">
+            <div id="joystick-base">
+                <div id="joystick-stick"></div>
+            </div>
+        </div>
+        <button id="shoot-btn" class="mobile-only">SHOOT</button>
+    </div>
+    <script src="space_shooter_main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,425 @@
+:root {
+  --primary: #0ff;
+  --danger: #f00;
+  --accent: yellow;
+  --bg-dark: #1a1a2e;
+  --bg-darker: #000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-darker);
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  overflow: hidden;
+  cursor: none;
+}
+
+#game-container {
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, var(--bg-dark) 0%, var(--bg-darker) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.player {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.laser {
+  position: absolute;
+  width: 4px;
+  height: 15px;
+  background: var(--danger);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px var(--danger);
+}
+
+.rock {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.enemy {
+  position: absolute;
+  width: 95px;
+  height: 95px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: transparent;
+  display: block;
+}
+
+.bubble-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.603);
+  border-radius: 50%;
+  animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+.fire {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  animation: fireAnimation 1s ease-out forwards;
+}
+
+.fire-small {
+  width: 30px;
+  height: 30px;
+}
+
+.fire-medium {
+  width: 60px;
+  height: 60px;
+}
+
+.fire-large {
+  width: 120px;
+  height: 120px;
+}
+
+@keyframes fireAnimation {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+    background: radial-gradient(circle, white 10%, yellow 25%, orange 50%, red 75%, rgba(255, 0, 0, 0) 100%);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+    background: radial-gradient(circle, yellow 10%, orange 40%, red 70%, rgba(255, 0, 0, 0) 100%);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+    background: radial-gradient(circle, orange 20%, red 50%, rgba(255, 0, 0, 0) 100%);
+  }
+}
+
+#hud {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 20px;
+  z-index: 1000;
+}
+
+#score {
+  margin-bottom: 10px;
+  color: var(--primary);
+  transition: transform 0.3s ease;
+}
+
+#score.score-updated {
+  transform: scale(1.2);
+}
+
+#health {
+  color: var(--danger);
+}
+
+#timer {
+  color: var(--accent);
+  margin-top: 10px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.overlay h1 {
+  font-size: 4rem;
+  color: var(--primary);
+  text-shadow: 0 0 20px var(--primary);
+  margin-bottom: 30px;
+}
+
+.overlay h2 {
+  font-size: 3rem;
+  color: var(--danger);
+  text-shadow: 0 0 20px var(--danger);
+  margin-bottom: 30px;
+}
+
+.overlay p {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+button {
+  padding: 15px 40px;
+  font-size: 1.5rem;
+  font-family: 'Orbitron', sans-serif;
+  background: var(--primary);
+  border: none;
+  border-radius: 5px;
+  color: var(--bg-darker);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #fff;
+  transform: scale(1.1);
+}
+
+.hidden {
+  display: none;
+}
+
+.game-over-animation {
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.energy-explosion {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, 
+    rgba(255, 255, 255, 1) 0%,
+    rgba(100, 200, 255, 0.8) 20%,
+    rgba(50, 150, 255, 0.6) 40%,
+    rgba(0, 100, 255, 0.4) 60%,
+    rgba(0, 50, 255, 0.2) 80%,
+    transparent 100%
+  );
+  animation: energyPulse 0.8s ease-out forwards;
+}
+
+.explosion-particle {
+  position: absolute;
+  transform-origin: 0 0;
+  pointer-events: none;
+  width: 2px;
+  background: linear-gradient(to right, 
+    rgba(255, 255, 255, 1),
+    rgba(100, 200, 255, 0.8),
+    rgba(50, 150, 255, 0.4),
+    transparent
+  );
+  animation: particleShoot 0.8s ease-out forwards;
+}
+
+.energy-explosion.explosion-small,
+.explosion-particle.explosion-small {
+  width: 30px;
+  height: 30px;
+}
+
+.explosion-particle.explosion-small {
+  height: 2px;
+}
+
+.energy-explosion.explosion-medium,
+.explosion-particle.explosion-medium {
+  width: 60px;
+  height: 60px;
+}
+
+.explosion-particle.explosion-medium {
+  height: 3px;
+}
+
+.energy-explosion.explosion-large,
+.explosion-particle.explosion-large {
+  width: 120px;
+  height: 120px;
+}
+
+.explosion-particle.explosion-large {
+  height: 4px;
+}
+
+@keyframes energyPulse {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+@keyframes particleShoot {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--rotation)) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(var(--rotation)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--rotation)) scale(2);
+  }
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+      display: block;
+  }
+  
+  .desktop-only {
+      display: none;
+  }
+
+  #joystick-area {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 120px;
+      height: 120px;
+      z-index: 1000;
+  }
+
+  #joystick-base {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  #joystick-stick {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      position: absolute;
+  }
+
+  #shoot-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--danger);
+      color: white;
+      border: none;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 6px;
+      z-index: 1000;
+      opacity: 0.8;
+      touch-action: manipulation;
+  }
+
+  #shoot-btn:active {
+      opacity: 1;
+      transform: scale(0.95);
+  }
+
+  .player {
+      width: 60px;
+      height: 60px;
+  }
+
+  .enemy {
+      width: 80px;
+      height: 80px;
+  }
+
+  .rock {
+      width: 30px;
+      height: 30px;
+  }
+
+  #hud {
+      font-size: 16px;
+  }
+
+  .overlay h1 {
+      font-size: 2.5rem;
+  }
+
+  .overlay h2 {
+      font-size: 2rem;
+  }
+
+  .overlay p {
+      font-size: 1rem;
+      padding: 0 20px;
+      text-align: center;
+  }
+
+  button {
+      padding: 12px 30px;
+      font-size: 1.2rem;
+  }
+}
+
+/* Prevent scrolling and bouncing on iOS */
+html, body {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
